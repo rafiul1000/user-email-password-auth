@@ -1,11 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = () => {
 
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleRegister = e => {
         e.preventDefault();
@@ -19,6 +21,10 @@ const Register = () => {
 
         if(password.length < 6){
             setRegisterError('Password should be at least 6 characters or longer');
+            return;
+        }
+        else if(!/[A-Z]/.test(password)){
+            setRegisterError('Your passwors should have at least one uppercase character.');
             return;
         }
 
@@ -43,7 +49,17 @@ const Register = () => {
             <form onSubmit={handleRegister}>
                 <input className="mb-4 w-3/4 py-2 px-4 bg-slate-500" placeholder="Email Address" type="email" name="email" id="" required />
                 <br />
-                <input className="mb-4 w-3/4 py-2 px-4 bg-slate-500" placeholder="Password" type="password" name="password" id="" required />
+                <input
+                 className="mb-4 w-3/4 py-2 px-4 bg-slate-500" 
+                 type={ showPassword ? "text" : "password"} 
+                 name="password" 
+                 placeholder="Password" 
+                 id="" required />
+                <span onClick={ ()=> setShowPassword(!showPassword) }>
+                    {
+                        showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>
+                    }
+                </span>
                 <br />
                 <input className="btn btn-secondary mb-4 w-3/4" type="submit" value="Register" />
             </form>
